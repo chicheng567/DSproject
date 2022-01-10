@@ -14,7 +14,20 @@
 #include <iostream>
 
 using namespace std;
-
+//定義座標結構 
+	struct Location {
+		int row;
+		int col;
+	};
+	typedef struct PathNode *PathPointer;
+	//定義路徑節點結構，用來建立移動路徑 
+	struct PathNode {
+		int cost; //距離原點的步數 
+		int steps; //距離目標的步數 
+		Location loc;
+		PathPointer parent;
+		PathPointer next;
+	};
 class Game {
 private:
 	//宣告遊戲場出現物體列舉函數 
@@ -26,31 +39,20 @@ private:
 		PLAYER
 	};
 	
-	//定義座標結構 
-	struct Location {
-		int row;
-		int col;
-	};
-	typedef struct PathNode *PathPointer;
+	
 
-	//定義路徑節點結構，用來建立移動路徑 
-	struct PathNode {
-		int cost; //距離原點的步數 
-		int steps; //距離目標的步數 
-		Location loc;
-		PathPointer parent;
-		PathPointer next;
-	};
+	
 	// attributes
 	character Player;
 	GameClock gameClock;
 	vector<character> zombies;
+	vector <Location> AllResource;
 	struct PathNode pathQueue[MAX_QUEUE_SIZE]; //宣告將要拜訪的節點柱列 
 	int front; //queue 第一個元素的前一個位置 
 	int rear; //queue 最後一個元素的位置
 	screen SCREEN;
 	
-	int field[GRID_SIDE][GRID_SIDE];
+	
 	int scoreSum = 0; //紀錄分數 
 	int killedCount = 0; //殺死喪屍數量 
 	int totalTime = 0; //紀錄遊戲時間 
@@ -59,6 +61,7 @@ private:
 	bool IFPlayAI = false; //是否開啟AI模式 
 	bool IFPause = false; //是否暫停
 public:
+	int field[GRID_SIDE][GRID_SIDE];
 	//game proccess
 	Game();
 	~Game();
@@ -67,7 +70,7 @@ public:
 	int playGame(); //遊戲進行邏輯 
 	//inputs
 	void controlPlayerDirection(); //讀取鍵盤方向輸入，或者AI輸入
-	void collectResourse();
+	void playerCollectResource();
 	//detects
 	bool IsAtWall(int row, int col); //判斷是否撞到牆 
 	bool IsAtZombie(int row, int col);//判斷是否撞到喪屍
@@ -75,6 +78,22 @@ public:
 	void upDateCharacter();
 	void showInfo();
 	int menu();
+	void createResource();
+	void controlZombieDirection();
+	void killZombie();
+	void addZombie();
+	Direction zombieAI(character &zombie,Location target);
+	Location findNearestResourceA(character& me);
+	PathPointer zombieFindPath(Location startLoc, Location goalLoc);
+	void resetPathQueue();
+	void addPathQueue(PathNode pathNode);
+	bool isPathQueueEmpty();
+	void sortPathQueue();
+	PathPointer popPathQueue();
+	bool visited(Location loc);
+	bool IsInPathQueue(PathNode pathNode);
+	Direction getDirectionByPath(character& head, PathPointer path);
+	Direction safeDirect4Zombie(character& zombie);
 };
 
 

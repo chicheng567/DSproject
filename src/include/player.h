@@ -12,10 +12,13 @@ class character {
 public:
     double x;
     double y;
-    int speed;
     Direction dir;
+     int speed;
     character(int y_in, int x_in, int speedSet);
     character();
+    int getX();
+    int getY();
+    Direction getDir();
     void movecharacter(double DeltaTime);
 };
 #endif

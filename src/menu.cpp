@@ -23,10 +23,10 @@ int title_light = 0;
 
 //options choose
 int currentButton = 1;
-    
+
 int Game::menu() {
 	
-	settextstyle(BOLD_FONT, HORIZ_DIR , 6);
+	
 	SCREEN.update();
 	cleardevice();
 	gameClock.updateClock();
